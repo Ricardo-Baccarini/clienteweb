@@ -14,11 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Dispatch;
 
 import br.com.fabricadeprogramador.model.Cliente;
+import br.com.fabricadeprogramador.service.ClienteService;
 
 @WebServlet(urlPatterns = { "/cliente", "/clienteServlet", "/clienteController" }) // Mapeado 3 formas de URL
 public class ClienteServlet extends HttpServlet {
 
-	List<Cliente> lista = new ArrayList();
+	ClienteService clienteservice;
 
 	public ClienteServlet() {
 		System.out.println("Construindo o Servlet");
@@ -31,6 +32,7 @@ public class ClienteServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
+		clienteservice = new ClienteService();
 		System.out.println("Iniciando Servlet....");
 		super.init();
 	}
@@ -44,11 +46,14 @@ public class ClienteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		String i = req.getParameter("i");
+		if ((i != null && i != "")) {
+			clienteservice.excluir(Integer.parseInt(i));
+		}
 		RequestDispatcher dispatcher = req.getRequestDispatcher("cliente.jsp");
-
-		req.setAttribute("lista", lista); // Atribui ao requeste o objeto lista setando como nome "lista"
+		req.setAttribute("lista", clienteservice.getTodosClientes()); // Atribui ao requeste o objeto lista setando como
+																		// nome "lista"
 		dispatcher.forward(req, resp); // Encaminha para tela do do cliente
-
 	}
 
 	@Override
@@ -64,15 +69,16 @@ public class ClienteServlet extends HttpServlet {
 		cli.setEmail(email);
 
 		// Adiciona o cliente em uma lista
-		lista.add(cli);
+		clienteservice.cadastrar(cli);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("cliente.jsp");
 		req.setAttribute("msg", "Cadastrado com sucesso");
-		req.setAttribute("lista", lista); // Atribui ao requeste o objeto lista setando como nome "lista"
+		req.setAttribute("lista", clienteservice.getTodosClientes()); // Atribui ao requeste o objeto lista setando como
+																		// nome "lista"
 		dispatcher.forward(req, resp); // Encaminha para tela do do cliente
-		
-		//resp.sendRedirect("cliente"); // Refaz requisição para o Servidor
-		
+
+		// resp.sendRedirect("cliente"); // Refaz requisição para o Servidor
+
 		// resp.setCharacterEncoding("UTF-8");
 		// resp.getWriter().print("Chamou pelo método POST - E-mail " + email + "!");
 	}
@@ -80,6 +86,7 @@ public class ClienteServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// System.out.println("Chamou pelo método POST");
+
 		resp.setCharacterEncoding("UTF-8");
 		resp.getWriter().print("Chamou pelo método DELETE");
 	}

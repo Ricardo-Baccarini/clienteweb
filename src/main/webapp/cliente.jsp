@@ -10,22 +10,24 @@
 
 	<div>
 		<%
-		Object msg = request.getAttribute("msg");
-		if (msg!=null){
-			String msgStr = (String)msg;
-			out.print(msgStr);
-		}
+			Object msg = request.getAttribute("msg");
+			if (msg != null) {
+				String msgStr = (String) msg;
+				out.print(msgStr);
+			}
 		%>
 	</div>
 	<form method="post" action="cliente">
-		E-mail: <input type="text" value="" name="e-mail" /> <input
-			type="submit" value="Save">
+		E-mail: <input type="text" value="" name="e-mail"> </input> 
+		        <input type="submit" value="Save"> </input>
 	</form>
 
 	<%
 		List<Cliente> lista = (List<Cliente>) request.getAttribute("lista");
+	    int i = 0;
 		for (Cliente c : lista) {
-			out.print(c.getEmail() + "<br/>");
+			out.print(c.getEmail() +   "<a href='cliente?i="+ i + "'> excluir </a> <br/>");
+			i++;
 		}
 	%>
 
