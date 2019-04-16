@@ -2,6 +2,7 @@ package clienteweb;
 
 import java.io.IOException;
 
+import javax.activation.MailcapCommandMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +41,10 @@ public class ClienteServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//System.out.println("Chamou pelo método POST");
+		
 		resp.setCharacterEncoding("UTF-8");
-		resp.getWriter().print("Chamou pelo método POST");
+		String email = req.getParameter("e-mail");
+		resp.getWriter().print("Chamou pelo método POST - E-mail " + email + "!");
 	}
 	
 	@Override
