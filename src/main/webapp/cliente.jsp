@@ -5,7 +5,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+	function confirma(parametroi) {
+		if (window.confirm("Deseja mesmo excluir?")) {
+			location.href = "cliente?i=" + parametroi;
+		}
+	}
+</script>
 </head>
+
 <body>
 
 	<div>
@@ -18,15 +27,15 @@
 		%>
 	</div>
 	<form method="post" action="cliente">
-		E-mail: <input type="text" value="" name="e-mail"> </input> 
-		        <input type="submit" value="Save"> </input>
+		E-mail: <input type="text" value="" name="e-mail" /> <input
+			type="submit" value="Save">
 	</form>
 
 	<%
 		List<Cliente> lista = (List<Cliente>) request.getAttribute("lista");
-	    int i = 0;
+		int i = 0;
 		for (Cliente c : lista) {
-			out.print(c.getEmail() +   "<a href='cliente?i="+ i + "'> excluir </a> <br/>");
+			out.print(c.getEmail() + "<a href='javascript:confirma(" + i + ")'> excluir </a> <br/>");
 			i++;
 		}
 	%>
