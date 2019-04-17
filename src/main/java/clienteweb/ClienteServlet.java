@@ -46,11 +46,25 @@ public class ClienteServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		//System.out.println("Chamou o método GET");
+		
+		
+		Cliente cli = new Cliente();
+		cli.setEmail("");
 		String i = req.getParameter("i");
-		if ((i != null && i != "")) {
-			clienteservice.excluir(Integer.parseInt(i));
+		String acao = req.getParameter("acao");
+		if (i!=null && i!="" && acao!=null && acao!="") {
+			if (acao.contentEquals("exc")) {
+				clienteservice.excluir(Integer.parseInt(i));
+			}else if (acao.equals("edit")) {
+				int indice = Integer.parseInt(i);
+				cli = clienteservice.buscarPorIndice(indice);
+			}
 		}
+		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("cliente.jsp");
+		req.setAttribute("cli", cli);
+		req.setAttribute("iCli", i);
 		req.setAttribute("lista", clienteservice.getTodosClientes()); // Atribui ao requeste o objeto lista setando como
 																		// nome "lista"
 		dispatcher.forward(req, resp); // Encaminha para tela do do cliente
@@ -62,7 +76,7 @@ public class ClienteServlet extends HttpServlet {
 
 		// Recebe o email
 		resp.setCharacterEncoding("UTF-8");
-		String email = req.getParameter("e-mail");
+		String email = req.getParameter("email");
 
 		// Instancia o cliente
 		Cliente cli = new Cliente();
@@ -71,8 +85,14 @@ public class ClienteServlet extends HttpServlet {
 		// Adiciona o cliente em uma lista
 		clienteservice.cadastrar(cli);
 
+		cli = new Cliente();
+		cli.setEmail("");
+		
+		//System.out.println("Chamou o método Post");
 		RequestDispatcher dispatcher = req.getRequestDispatcher("cliente.jsp");
 		req.setAttribute("msg", "Cadastrado com sucesso");
+		req.setAttribute("cli", cli);
+		//req.setAttribute("icli", "");
 		req.setAttribute("lista", clienteservice.getTodosClientes()); // Atribui ao requeste o objeto lista setando como
 																		// nome "lista"
 		dispatcher.forward(req, resp); // Encaminha para tela do do cliente

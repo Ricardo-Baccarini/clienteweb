@@ -20,4 +20,9 @@ public class ClienteService {
 	public void excluir(int indice ) {
 		lista.remove(indice);
 	}
+
+	public Cliente buscarPorIndice(int indice) {
+		return lista.get(indice);
+	}
+	
 }

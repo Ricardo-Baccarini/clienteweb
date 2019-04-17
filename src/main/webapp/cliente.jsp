@@ -7,9 +7,9 @@
 <title>Insert title here</title>
 
 <script type="text/javascript">
-	function confirma(parametroi) {
+	function confirma(pi) {
 		if (window.confirm("Deseja mesmo excluir?")) {
-			location.href = "cliente?i=" + parametroi;
+			location.href = "cliente?acao=exc&i=" + pi ;
 		}
 	}
 </script>
@@ -24,19 +24,35 @@
 				String msgStr = (String) msg;
 				out.print(msgStr);
 			}
+
+			Cliente cli = (Cliente) request.getAttribute("cli");
+
+			Object iCli = (String) request.getAttribute("iCli");
+
 		%>
 	</div>
 	<form method="post" action="cliente">
-		E-mail: <input type="text" value="" name="e-mail" /> <input
-			type="submit" value="Save">
+		<input type="hidden" name="i" value="<%=iCli%>"/> 
+		
+		E-mail: 
+		<input type="text" value="<%=cli.getEmail()%>" name="email" /> 
+		
+		<input type="submit" value="Save">
 	</form>
 
 	<%
 		List<Cliente> lista = (List<Cliente>) request.getAttribute("lista");
 		int i = 0;
-		for (Cliente c : lista) {
-			out.print(c.getEmail() + "<a href='javascript:confirma(" + i + ")'> excluir </a> <br/>");
-			i++;
+		for (Cliente c :lista) {
+	%>
+	<%=c.getEmail() %>
+	
+	<a href="javascript:confirma(<%=i%>)"> excluir </a> |
+	<a href="cliente?i=<%=i%>&acao=edit"> editar </a>
+
+	<br />
+	<%
+		i++;
 		}
 	%>
 
